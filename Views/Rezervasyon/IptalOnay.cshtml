@@ -1,0 +1,19 @@
+﻿@model TinyHouse.Models.RezervasyonViewModel
+
+@{
+    ViewData["Title"] = "Rezervasyon İptali Onayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Rezervasyon İptali Onayı</h2>
+
+<div class="alert alert-warning">
+    <p><strong>@Model.EvBasligi</strong> adlı ev için, <strong>@Model.BaslangicTarihi.ToShortDateString()</strong> - <strong>@Model.BitisTarihi.ToShortDateString()</strong> tarihleri arasındaki rezervasyonu iptal etmek istediğinize emin misiniz?</p>
+</div>
+
+<form asp-action="IptalOnay" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="RezervasyonID" />
+    <button type="submit" class="btn btn-danger">Evet, İptal Et</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>

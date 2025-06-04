@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Giriş Yap";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-center">
+    <div class="welcome-container">
+        <div class="welcome-title">Giriş Yap</div>
+        <div class="card-container">
+            <div class="welcome-card">
+                @if (ViewBag.Hata != null)
+                {
+                    <div style="color:red; margin-bottom:15px;">@ViewBag.Hata</div>
+                }
+                <form method="post" asp-action="Giris" style="width: 100%; display: flex; flex-direction: column;">
+                    <input type="email" name="eposta" placeholder="E-posta" required class="form-control" />
+                    <input type="password" name="sifre" placeholder="Şifre" required class="form-control" />
+
+                    <div style="width: 100%; margin-bottom: 16px;">
+                        <label for="beniHatirla" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="beniHatirla" name="beniHatirla" style="accent-color: #8f5ee5; width: 18px; height: 18px;" />
+                            <span style="font-size: 0.95rem;">Beni Hatırla</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="card-btn">Giriş Yap</button>
+
+                    <div style="margin-top: 18px; text-align: center;">
+                        <a href="/Kullanici/Kayit" style="margin-right: 10px;">Kayıt Ol</a>
+                        <a href="/Kullanici/SifreGuncelle">Şifremi Unuttum</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

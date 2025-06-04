@@ -1,0 +1,55 @@
+﻿@model TinyHouse.Models.EvSahibiTinyHouse
+@{
+    ViewData["Title"] = "Bildirimler";
+    Layout = "~/Views/Shared/_EvSahibiLayout.cshtml";// EvSahibi layout dosyasını kullan
+}
+
+
+<h2>Yeni İlan Ekle</h2>
+
+<form asp-action="IlanEkle" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="Baslik" class="form-label">Başlık</label>
+        <input asp-for="Baslik" class="form-control" />
+        <span asp-validation-for="Baslik" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Aciklama" class="form-label">Açıklama</label>
+        <textarea asp-for="Aciklama" class="form-control"></textarea>
+        <span asp-validation-for="Aciklama" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Fiyat" class="form-label">Fiyat</label>
+        <input asp-for="Fiyat" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="Fiyat" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="KonumID" class="form-label">Konum</label>
+        <select asp-for="KonumID" asp-items="ViewBag.Konumlar" class="form-select">
+            <option value="">-- Seçiniz --</option>
+        </select>
+        <span asp-validation-for="KonumID" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DurumID" class="form-label">Durum</label>
+        <select asp-for="DurumID" asp-items="ViewBag.Durumlar" class="form-select">
+            <option value="">-- Seçiniz --</option>
+        </select>
+        <span asp-validation-for="DurumID" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="fotoğraflar" class="form-label">Fotoğraflar</label>
+        <input type="file" name="fotoğraflar" multiple class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ekle</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

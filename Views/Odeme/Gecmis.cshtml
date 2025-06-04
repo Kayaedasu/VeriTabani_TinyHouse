@@ -1,0 +1,32 @@
+﻿@model List<TinyHouse.Models.OdemeViewModel>
+
+@{
+    ViewData["Title"] = "Ödeme İşlem Geçmişi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Ödeme İşlem Geçmişi</h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Ödeme ID</th>
+            <th>Rezervasyon ID</th>
+            <th>Tutar</th>
+            <th>Ödeme Tarihi</th>
+            <th>Ödeme Yöntemi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var odeme in Model)
+        {
+            <tr>
+                <td>@odeme.OdemeID</td>
+                <td>@odeme.RezervasyonID</td>
+                <td>@odeme.Tutar.ToString("C")</td>
+                <td>@odeme.OdemeTarihi.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@odeme.OdemeYontemi</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,64 @@
+﻿.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.admin-exit {
+    background-color: #b388eb;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+    .admin-exit:hover {
+        background-color: #9d7ad0;
+    }
+
+/* Pasiflik Kartı */
+.pasif-karti {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 0 20px rgba(120, 40, 180, 0.08);
+    padding: 2.3rem;
+    margin-top: 50px;
+}
+
+    .pasif-karti h2 {
+        color: #7e3ff2;
+        font-weight: 600;
+        margin-bottom: 32px;
+    }
+
+.alert-warning {
+    background-color: #f3e8ff;
+    border-color: #b388eb;
+    color: #7e3ff2;
+    font-weight: 500;
+}
+
+.btn-pasif {
+    background-color: #b388eb;
+    border-color: #b388eb;
+    color: #4b0082;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+    .btn-pasif:hover {
+        background-color: #9d7ad0;
+        border-color: #9d7ad0;
+        color: #fff;
+    }
+
+.btn-secondary {
+    background-color: #e9d8fd;
+    border-color: #b388eb;
+    color: #7e3ff2;
+    font-weight: 500;
+}

@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TinyHouse</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/adminsite.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/welcome.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TinyHouse.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <!-- Header içeriği buraya -->
+    </header>
+
+    <div class="container mt-3">
+        @if (TempData["Basarili"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Basarili"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Hata"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Hata"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
+
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    }
+
+    @* Buton sadece aşağıdaki sayfalarda görünsün, AdminDashboard dışında *@
+    @if (
+        (currentController == "Admin" && currentAction != "AdminDashboard") ||
+        currentController == "Ilan" ||
+        currentController == "Rezervasyon" ||
+        currentController == "Odeme"
+        )
+    {
+        <a asp-controller="Admin" asp-action="AdminDashboard" class="btn btn-secondary mb-3">
+            ← Dashboard'a Dön
+        </a>
+    }
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - TinyHouseAdmin - <a asp-controller="Home" asp-action="Privacy">Gizlilik</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

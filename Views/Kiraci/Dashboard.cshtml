@@ -1,0 +1,206 @@
+﻿@model TinyHouse.Models.DashboardViewModel
+@{
+    ViewBag.Title = "Ana Sayfa";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml";
+}
+
+<div class="d-flex" style="min-height: 90vh;">
+    <!-- Hamburger Icon -->
+    <button id="openSidebarBtn" class="btn btn-light" aria-label="Open sidebar" style="position: fixed; top: 15px; left: 15px; z-index: 1100; font-size: 1.8rem;">
+        &#9776;
+    </button>
+
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar-closed">
+        <div class="sidebar-header d-flex justify-content-between align-items-center px-3 py-2">
+            <h3 class="text-purple m-0">Menu</h3>
+            <button id="closeSidebarBtn" class="btn btn-light" aria-label="Close sidebar" style="font-size: 1.8rem;">
+                &times;
+            </button>
+        </div>
+        <ul class="list-unstyled ps-3">
+            <li><a href="/Kiraci/Evler" class="nav-link text-purple">Evleri Listele</a></li>
+            <li><a href="/Kiraci/Rezervasyonlarim" class="nav-link text-purple">Rezervasyonlarım</a></li>
+            <li><a href="/Yorum/Yorumlarim" class="nav-link text-purple">Yorumlarım</a></li>
+
+            <li><a href="/Kiraci/Profilim" class="nav-link text-purple">Profilim</a></li>
+        </ul>
+    </nav>
+
+    <!-- İçerik -->
+    <main class="flex-grow-1 p-5 d-flex flex-column align-items-center text-center" style="max-width: 1100px; margin: auto;">
+        <!-- Hoşgeldin Mesajı -->
+        <h1 style="
+            background-color: rgba(155, 89, 182, 0.3);
+            color: black;
+            padding: 25px 40px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 3.5rem;
+            max-width: 600px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.25);
+            ">
+            Hoş Geldin, <span style="font-style: italic;">@ViewBag.Ad</span>! 🌸
+        </h1>
+
+        <!-- Bilgi Kutucukları -->
+        <div class="d-flex justify-content-center gap-4 flex-wrap mb-5" style="width: 100%; max-width: 900px;">
+            <div class="info-card shadow-sm p-4 rounded" style="flex: 1 1 250px; background-color: #f6e6ff;">
+                <h3 style="color: #9b59b6;">@Model.ToplamRezervasyon</h3>
+                <p>Toplam Rezervasyon</p>
+            </div>
+            <div class="info-card shadow-sm p-4 rounded" style="flex: 1 1 250px; background-color: #f6e6ff;">
+                <h3 style="color: #9b59b6;">@String.Format("{0:N2} ₺", Model.ToplamOdeme)</h3>
+                <p>Toplam Ödeme</p>
+            </div>
+            <div class="info-card shadow-sm p-4 rounded" style="flex: 1 1 250px; background-color: #f6e6ff;">
+                <h3 style="color: #9b59b6;">
+                    @(Model.SonRezervasyon != null ? Model.SonRezervasyon.Value.ToString("dd.MM.yyyy") : "Henüz rezervasyon yok")
+
+                </h3>
+                <p>Son Rezervasyon Tarihi</p>
+            </div>
+        </div>
+
+        <!-- Popüler Evler Başlığı -->
+        <h3 class="text-custom-lila mb-4 border-bottom pb-2" style="width: 100%; max-width: 1100px; font-weight: 600;">Popüler Evler</h3>
+
+        <!-- Popüler Evler Partial -->
+        <div id="populer-evler" class="populer-evler-blur" style="width: 100%; max-width: 1100px;">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var ev in Model.PopulerEvler)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <img src="@Url.Content(ev.Resimler.Count > 0 ? ev.Resimler[0] : "/uploads/placeholder.jpg")" alt="Ev Fotoğrafı"  />
+                            <div class="card-body">
+                                <h5 class="card-title">@ev.Baslik</h5>
+                                <p class="card-text">@ev.Aciklama</p>
+                                <p><strong>Fiyat:</strong> @ev.Fiyat ₺</p>
+                                <p><strong>Konum:</strong> @ev.Konum</p>
+                                <p><strong>Ortalama Puan:</strong> @ev.OrtalamaPuan</p>
+                                <a href="/Kiraci/EvDetay/@ev.EvID" class="btn btn-primary">Detay</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        
+    </main>
+</div>
+
+<style>
+    body {
+        overflow-x: hidden; /* Yatay scroll olmasın */
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        background-color: rgba(155, 89, 182, 0.15);
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1050;
+        box-sizing: border-box;
+        padding-top: 3rem;
+    }
+
+        #sidebar.sidebar-open {
+            transform: translateX(0);
+        }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 56px;
+        border-bottom: 1px solid rgba(155, 89, 182, 0.3);
+        padding: 0 1rem;
+    }
+
+        .sidebar-header h3 {
+            color: #9b59b6;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+    ul.list-unstyled {
+        margin-top: 10px;
+        padding-left: 0;
+    }
+
+        ul.list-unstyled li a.nav-link {
+            display: block;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #9b59b6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            ul.list-unstyled li a.nav-link:hover {
+                background-color: #8e44ad;
+                color: white;
+                border-radius: 5px;
+            }
+
+    #openSidebarBtn {
+        /* Varsayılan olarak görünür */
+    }
+
+        #openSidebarBtn.hidden {
+            display: none;
+        }
+
+    #closeSidebarBtn {
+        font-size: 1.8rem;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .info-card h3 {
+        margin: 0;
+        font-size: 2.5rem;
+    }
+
+    .info-card p {
+        margin: 0;
+        font-weight: 600;
+        color: #6c3483;
+    }
+
+    .text-custom-lila {
+        color: #9b59b6;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const openBtn = document.getElementById('openSidebarBtn');
+            const closeBtn = document.getElementById('closeSidebarBtn');
+
+            openBtn.addEventListener('click', function () {
+                sidebar.classList.add('sidebar-open');
+                openBtn.classList.add('hidden');
+            });
+
+            closeBtn.addEventListener('click', function () {
+                sidebar.classList.remove('sidebar-open');
+                openBtn.classList.remove('hidden');
+            });
+        });
+    </script>
+}

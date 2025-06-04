@@ -1,0 +1,61 @@
+﻿@model IEnumerable<TinyHouse.Models.Yorum>
+@{
+	ViewData["Title"] = "Yorumlar";
+	Layout = "~/Views/Shared/_EvSahibiLayout.cshtml"; // EvSahibi layout dosyasını kullan
+}
+
+<h2>Yorumlar</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz yorum yok.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Puan</th>
+                <th>Yorum</th>
+                <th>Tarih</th>
+                <th>Cevap</th>
+                <th>Cevapla</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var yorum in Model)
+            {
+                <tr>
+                    <td>@yorum.Puan</td>
+                    <td>@yorum.YorumMetni</td>
+                    <td>@yorum.YorumTarihi.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        @if (yorum.Cevap != null)
+                        {
+                            <div>@yorum.Cevap.CevapMetni</div>
+                            <small>@yorum.Cevap.CevapTarihi.ToString("dd.MM.yyyy HH:mm")</small>
+                        }
+                        else
+                        {
+                            <em>Henüz cevap yok</em>
+                        }
+                    </td>
+                    <td>
+                        @if (yorum.Cevap == null)
+                        {
+                            <form asp-action="YorumCevapla" method="post">
+                                <input type="hidden" name="yorumId" value="@yorum.YorumID" />
+                                <textarea name="cevapMetni" required class="form-control" rows="2"></textarea>
+                                <button type="submit" class="btn btn-primary btn-sm mt-1">Cevapla</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <em>Cevaplandı</em>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

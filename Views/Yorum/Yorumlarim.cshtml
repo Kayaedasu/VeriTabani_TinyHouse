@@ -1,0 +1,28 @@
+﻿@model List<TinyHouse.Models.Yorum>
+@{
+    ViewData["Title"] = "Yorumlarım";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+<h2>Yorumlarım</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ev</th>
+            <th>Puan</th>
+            <th>Yorum</th>
+            <th>Tarih</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var y in Model)
+        {
+            <tr>
+                <td>@y.Baslik</td>
+                <td>@y.Puan</td>
+                <td>@y.YorumMetni</td>
+                <td>@y.YorumTarihi.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

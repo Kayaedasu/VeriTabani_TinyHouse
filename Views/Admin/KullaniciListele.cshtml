@@ -1,0 +1,72 @@
+﻿@model List<TinyHouse.Models.Kullanici>
+
+@{
+    ViewData["Title"] = "Kullanıcı Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var roller = ViewBag.Roller as List<TinyHouse.Models.Rol>;
+    var rolAdlari = ViewBag.RolAdlari as Dictionary<int, string>;
+    var aktiflik = Context.Request.Query["aktiflik"];
+    var seciliRol = Context.Request.Query["rolID"];
+    var arama = Context.Request.Query["arama"];
+}
+
+<h2 class="mb-3">Kullanıcı Listesi</h2>
+
+<form method="get" class="mb-4 d-flex gap-2 flex-wrap">
+    <input type="text" name="arama" class="form-control" style="width: 300px;" placeholder="Ad, soyad veya e-posta ara" value="@arama" />
+
+    <select name="rolID" class="form-select" style="width: 200px;">
+        <option value="">Tüm Roller</option>
+        @foreach (var rol in roller ?? new List<TinyHouse.Models.Rol>())
+        {
+            <option value="@rol.RolID" selected="@(rol.RolID.ToString() == seciliRol ? "selected" : null)">
+                @rol.RolAdi
+            </option>
+        }
+    </select>
+
+    <select name="aktiflik" class="form-select" style="width: 200px;">
+        <option value="">Tüm Durumlar</option>
+        <option value="1" selected="@(aktiflik == "1" ? "selected" : null)">Aktif</option>
+        <option value="0" selected="@(aktiflik == "0" ? "selected" : null)">Pasif</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Filtrele</button>
+    <a href="/Admin/Kullanicilar" class="btn btn-secondary">Temizle</a>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>E-posta</th>
+            <th>Telefon</th>
+            <th>Rol</th>
+            <th class="text-center">İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var k in Model)
+        {
+            <tr>
+                <td>@k.Ad</td>
+                <td>@k.Soyad</td>
+                <td>@k.Eposta</td>
+                <td>@k.Telefon</td>
+                <td>@rolAdlari?[k.RolID]</td>
+                <td class="text-center">
+                    <a asp-controller="Admin" asp-action="Duzenle" asp-route-id="@k.KullaniciID" class="btn btn-sm btn-primary me-1">Düzenle</a>
+
+                    @if (rolAdlari?[k.RolID] != "Admin")
+                    {
+                        <a asp-controller="Admin" asp-action="Sil" asp-route-id="@k.KullaniciID" class="btn btn-sm btn-danger me-1">Sil</a>
+                        <a asp-controller="Admin" asp-action="AktiflikDegistir" asp-route-id="@k.KullaniciID" class="btn btn-sm btn-warning">
+                            @(k.AktifMi ? "Pasifleştir" : "Aktifleştir")
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,37 @@
+﻿@model TinyHouse.Models.EvSahibiRezervasyon
+@{
+        ViewData["Title"] = "Rezervasyon Detayı";
+    Layout = "~/Views/Shared/_EvSahibiLayout.cshtml"; // EvSahibi layout dosyasını kullan
+}
+
+
+<h2>Rezervasyon Detayı</h2>
+
+<table class="table">
+    <tr>
+        <th>Kiracı</th>
+        <td>@Model.KiraciAdi</td>
+    </tr>
+    <tr>
+        <th>Ev ID</th>
+        <td>@Model.EvID</td>
+    </tr>
+    <tr>
+        <th>Başlangıç Tarihi</th>
+        <td>@Model.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
+    </tr>
+    <tr>
+        <th>Bitiş Tarihi</th>
+        <td>@Model.BitisTarihi.ToString("dd.MM.yyyy")</td>
+    </tr>
+    <tr>
+        <th>Durum</th>
+        <td>@Model.DurumAdi</td>
+    </tr>
+    <tr>
+        <th>Açıklama</th>
+        <td>@Model.Aciklama</td>
+    </tr>
+</table>
+
+<a asp-action="Rezervasyonlar" class="btn btn-secondary mt-3">Geri Dön</a>

@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Hoş Geldiniz";
+    Layout = "_AdminLayout"; // Genel layout sayfasını kullanıyoruz
+}
+
+<!-- SEO için görünmeyen başlık -->
+<h1 style="display: none;">Tiny House Rezervasyon Sistemi</h1>
+
+<div class="main-center">
+    <div class="welcome-container">
+        <div class="welcome-title">Tiny House'a Hoş Geldiniz!</div>
+        <div class="card-container">
+
+            <!-- Zaten üye olanlar için kart -->
+            <div class="welcome-card">
+                <div class="card-title">Zaten Üyeyim</div>
+                <div class="card-desc">Hesabınıza giriş yapmak için aşağıdaki butona tıklayın.</div>
+                <a class="card-btn" href="/Kullanici/Giris">Giriş Yap</a>
+            </div>
+
+            <!-- Yeni üye olacaklar için kart -->
+            <div class="welcome-card">
+                <div class="card-title">Yeni Üyeyim</div>
+                <div class="card-desc">Hemen ücretsiz kayıt olarak Tiny House ayrıcalıklarından faydalanın.</div>
+                <a class="card-btn" href="/Kullanici/Kayit">Kayıt Ol</a>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Http
+@model List<TinyHouse.Models.Ev>
+@{
+    ViewData["Title"] = "Evler";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+
+<div class="container mt-4">
+    <h2 class="text-custom-lila mb-4">Ev Ara ve Listele</h2>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <input type="text" name="sehir" class="form-control" placeholder="Şehir girin" value="@Context.Request.Query["sehir"]" />
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="minFiyat" class="form-control" placeholder="Min Fiyat" value="@Context.Request.Query["minFiyat"]" />
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="maxFiyat" class="form-control" placeholder="Max Fiyat" value="@Context.Request.Query["maxFiyat"]" />
+        </div>
+        <div class="col-md-3">
+            <select name="siralama" class="form-select">
+                <option value="">Sıralama Seçiniz</option>
+                <option value="fiyat_az" @@(Context.Request.Query["siralama"] == "fiyat_az" ? "selected" : "")>Fiyat: En Düşükten Yükseğe</option>
+                <option value="fiyat_cok"@@(Context.Request.Query["siralama"] == "fiyat_cok" ? "selected" : "")>Fiyat: En Yüksekten Düşüğe</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+        </div>
+    </form>
+
+    <h2 class="mb-4">Aktif Tiny House Evleri</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@Url.Content(ev.Resimler.Count > 0 ? ev.Resimler[0] : "/uploads/placeholder.jpg")" alt="Ev Fotoğrafı" />
+                    <div class="card-body">
+                        <h5 class="card-title">@ev.Baslik</h5>
+                        <p class="card-text">@ev.Aciklama</p>
+                        <p><strong>Fiyat:</strong> @ev.Fiyat ₺</p>
+                        <p><strong>Konum:</strong> @ev.Konum</p>
+                        <a href="/Kiraci/EvDetay/@ev.EvID" class="btn btn-primary">Rezervasyon Yap</a>
+                        <hr/>
+                        <a href="/Kiraci/EvDetay/@ev.EvID" class="btn btn-primary">Yorum Yap</a>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,134 @@
+﻿@model List<TinyHouse.Models.Rezervasyon>
+@{
+    ViewData["Title"] = "Rezervasyonlarım";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+
+<h2 style="color:#9c7ecf;">Rezervasyonlarım</h2>
+
+@if (TempData["Basarili"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Basarili"]
+    </div>
+}
+
+<table class="table rezervasyon-table">
+    <thead>
+        <tr>
+            <th>Ev</th>
+            <th>Başlangıç Tarihi</th>
+            <th>Bitiş Tarihi</th>
+            <th>Durum</th>
+            <th>İptal</th>
+            <th>Ödeme Durumu</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Baslik</td>
+                <td>@r.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
+                <td>@r.BitisTarihi.ToString("dd.MM.yyyy")</td>
+                <td>@(r.DurumID == 1 ? "Beklemede" : r.DurumID == 2 ? "Onaylandı" : "İptal")</td>
+                <td>
+                    @if (r.DurumID != 3)
+                    {
+                        <form method="post" asp-action="RezervasyonIptal" asp-controller="Kiraci" style="display:inline;">
+                            <input type="hidden" name="rezervasyonID" value="@r.RezervasyonID" />
+                            <button type="submit" class="btn btn-danger btn-sm">İptal Et</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-muted">İptal Edildi</span>
+                    }
+                <td>@(r.ToplamOdeme > 0 ? $"{r.ToplamOdeme:N2} ₺" : "Ödeme yapılmadı")</td>
+                <td>@(string.IsNullOrEmpty(r.OdemeDurumu) ? "Ödeme yapılmadı" : r.OdemeDurumu)</td>
+                <td>
+                        @if (r.ToplamOdeme > 0)
+                        {
+                        <span class="text-success fw-bold">Ödeme Yapıldı</span>
+                        }
+                        else if (r.DurumID == 3)
+                        {
+                        <span class="text-muted">İptal Edildi</span>
+                        }
+                        else
+                        {
+                        <a href="@Url.Action("Yeni", "Odeme", new { rezervasyonId = r.RezervasyonID })" class="btn btn-lila btn-sm">Ödeme Yap</a>
+                        }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .rezervasyon-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .rezervasyon-table th,
+        .rezervasyon-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .rezervasyon-table th {
+            background-color: #f3e9ff;
+            color: #9c7ecf;
+            font-weight: 700;
+        }
+
+        .rezervasyon-table tbody tr:hover {
+            background-color: #faf0ff;
+        }
+
+    .btn-lila {
+        background-color: #9c7ecf;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 12px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+        .btn-lila:hover {
+            background-color: #7a5bbc;
+            color: white;
+        }
+
+    .btn-danger {
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 12px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+        .btn-danger:hover {
+            background-color: #b43730;
+            color: white;
+        }
+
+    .text-success {
+        font-weight: 600;
+        color: #28a745;
+    }
+
+    .text-muted {
+        font-style: italic;
+        color: #999999;
+    }
+</style>

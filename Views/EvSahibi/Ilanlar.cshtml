@@ -1,0 +1,79 @@
+﻿@model IEnumerable<TinyHouse.Models.EvSahibiTinyHouse>
+@{
+        ViewData["Title"] = "İlanlarım";
+    Layout = "~/Views/Shared/_EvSahibiLayout.cshtml"; // EvSahibi layout dosyasını kullan
+}
+
+
+<h2>İlanlarım</h2>
+
+@if (!Model.Any())
+{
+    <p>Henüz ilanınız yok.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var ilan in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm rounded-4">
+                    @if (ilan.Fotolar != null && ilan.Fotolar.Any())
+                    {
+                        <img src="@ilan.Fotolar.First().FotoUrl" class="card-img-top rounded-top-4" alt="Ev Fotoğrafı" style="height:200px; object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center rounded-top-4" style="height:200px;">
+                            Fotoğraf Yok
+                        </div>
+                    }
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">@ilan.Baslik</h5>
+                        <p class="card-text text-truncate">@ilan.Aciklama</p>
+                        <p class="card-text"><strong>Fiyat:</strong> @ilan.Fiyat.ToString("C")</p>
+                        <p class="card-text"><small class="text-muted">Eklenme Tarihi: @ilan.EklenmeTarihi.ToShortDateString()</small></p>
+
+                        <div class="mb-3">
+                            @{
+                                var puan = ilan.OrtalamaPuan;
+                                if (puan > 0)
+                                {
+                                    int doluYildiz = (int)Math.Floor(puan);
+                                    int bosYildiz = 5 - doluYildiz;
+
+                                    for (int i = 0; i < doluYildiz; i++)
+                                    {
+                                        <span style="color:gold; font-size: 1.3rem;">&#9733;</span>
+                                    }
+                                    for (int i = 0; i < bosYildiz; i++)
+                                    {
+                                        <span style="color:#ccc; font-size: 1.3rem;">&#9733;</span>
+                                    }
+                                    <span class="ms-2 fw-semibold">(@puan.ToString("0.0"))</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">Henüz puan yok</span>
+                                }
+                            }
+                        </div>
+
+                        <div class="mt-auto d-flex justify-content-between flex-wrap gap-2">
+                            <a asp-action="IlanGuncelle" asp-route-id="@ilan.EvID" class="btn btn-primary btn-sm px-4">Güncelle</a>
+                            <form asp-action="IlanSil" asp-route-id="@ilan.EvID" method="post" onsubmit="return confirm('Bu ilanı silmek istediğinizden emin misiniz?');">
+                                <button type="submit" class="btn btn-outline-danger btn-sm px-4">Sil</button>
+                            </form>
+
+                            <!-- Sadece Detay butonu kaldı -->
+                            <a asp-controller="EvSahibi" asp-action="IlanDetay" asp-route-id="@ilan.EvID" class="btn btn-primary btn-sm px-4">Detay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<a href="@Url.Action("IlanEkle", "EvSahibi")" class="btn btn-outline-primary mt-3">Yeni İlan Ekle</a>

@@ -1,0 +1,28 @@
+﻿@model TinyHouse.Models.Yorum
+@{
+    ViewData["Title"] = "Yeni Yorum";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+<h2>Yeni Yorum Ekle</h2>
+
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+<form asp-controller="KiraciYorum" asp-action="Ekle" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="EvID" />
+    <input type="hidden" name="RezervasyonID" value="@ViewBag.GecerliRezervasyonID" />
+
+    <div class="mb-3">
+        <label asp-for="YorumMetni" class="form-label">Yorumunuz:</label>
+        <textarea asp-for="YorumMetni" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Puan" class="form-label">Puan (1-5):</label>
+        <input asp-for="Puan" type="number" min="1" max="5" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Gönder</button>
+</form>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TinyHouse.Models.Bildirim>
+@{
+    ViewData["Title"] = "Bildirimler";
+    Layout = "~/Views/Shared/_EvSahibiLayout.cshtml";// EvSahibi layout dosyasını kullan
+}
+
+
+<h2>Bildirimlerim</h2>
+
+@if (!Model.Any())
+{
+    <p>Henüz bildirim yok.</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var bildirim in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center @(bildirim.Okundu ? "" : "list-group-item-primary")">
+                <div>
+                    <strong>@bildirim.Baslik</strong><br />
+                    @bildirim.Mesaj<br />
+                    <small class="text-muted">@bildirim.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</small>
+                </div>
+                @if (!bildirim.Okundu)
+                {
+                    <form asp-action="BildirimOkundu" method="post" class="mb-0">
+                        <input type="hidden" name="id" value="@bildirim.BildirimID" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary">Okundu</button>
+                    </form>
+                }
+            </li>
+        }
+    </ul>
+}

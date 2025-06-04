@@ -1,0 +1,19 @@
+﻿@model TinyHouse.Models.Ilan
+
+@{
+    ViewData["Title"] = "İlan Sil";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>İlan Silme Onayı</h2>
+
+<div class="alert alert-warning">
+    <p>“<strong>@Model.Baslik</strong>” başlıklı ilanı silmek istediğinize emin misiniz?</p>
+</div>
+
+<form asp-action="Sil" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="IlanID" />
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>

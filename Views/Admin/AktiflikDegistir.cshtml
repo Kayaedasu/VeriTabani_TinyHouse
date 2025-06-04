@@ -1,0 +1,49 @@
+﻿@model TinyHouse.Models.Kullanici
+
+@{
+    ViewData["Title"] = Model.AktifMi ? "Kullanıcıyı Pasif Yap" : "Kullanıcıyı Aktif Yap";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; // Admin layout dosyasını kullan
+    bool isActive = Model.AktifMi;
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="pasif-karti">
+                <h2 class="text-center">@ViewData["Title"]</h2>
+
+                <div class="alert alert-warning text-center mb-4">
+                    @if (isActive)
+                    {
+                        <text>
+                            <strong>@Model.Ad @Model.Soyad</strong> adlı kullanıcıyı pasif yapmak üzeresiniz.<br />
+                            <span style="font-size:0.95em;">İsterseniz açıklama ekleyebilirsiniz:</span>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            <strong>@Model.Ad @Model.Soyad</strong> adlı kullanıcıyı aktif yapmak üzeresiniz.<br />
+                            <span style="font-size:0.95em;">İsterseniz açıklama ekleyebilirsiniz:</span>
+                        </text>
+                    }
+                </div>
+
+                <form method="post" asp-action="AktiflikDegistir">
+                    <input type="hidden" name="KullaniciID" value="@Model.KullaniciID" />
+
+                    <div class="mb-3">
+                        <label for="Aciklama" class="form-label">Açıklama</label>
+                        <textarea id="Aciklama" name="Aciklama" class="form-control"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn @(isActive ? "btn-pasif" : "btn-success") px-4">
+                            @(isActive ? "Pasif Yap" : "Aktif Yap")
+                        </button>
+                        <a href="/Admin/Kullanicilar" class="btn btn-secondary px-4">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

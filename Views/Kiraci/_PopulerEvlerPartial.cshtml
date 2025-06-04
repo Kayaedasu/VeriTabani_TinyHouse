@@ -1,0 +1,34 @@
+﻿@model List<TinyHouse.Models.Ev>
+@{
+    ViewData["Title"] = "Popüler Evler";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var ev in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                @if (ev.Resimler != null && ev.Resimler.Any())
+                {
+                    <img src="@Url.Content(ev.Resimler[0])" class="card-img-top" alt="Ev Fotoğrafı" style="height: 200px; object-fit: cover; width: 100%;" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/uploads/urlaev.jpg")" class="card-img-top" alt="Varsayılan Ev Fotoğrafı" style="height: 200px; object-fit: cover;" />
+                }
+
+
+                <div class="card-body">
+                    <h5 class="card-title">@ev.Baslik</h5>
+                    <p class="card-text">@ev.Aciklama</p>
+                    <p><strong>Fiyat:</strong> @ev.Fiyat ₺</p>
+                    <p><strong>Konum:</strong> @ev.Konum</p>
+                    <p><strong>Ortalama Puan:</strong> @ev.OrtalamaPuan</p>
+                    <a href="/Kiraci/EvDetay/@ev.EvID" class="btn btn-primary">Detay</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

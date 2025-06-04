@@ -1,0 +1,71 @@
+﻿@model IEnumerable<TinyHouse.Models.EvSahibiRezervasyon>
+@{
+        ViewData["Title"] = "Rezervasyon Taleplerim";
+    Layout = "~/Views/Shared/_EvSahibiLayout.cshtml"; // EvSahibi layout dosyasını kullan
+
+}
+
+<h2>Rezervasyon Taleplerim</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz rezervasyon talebiniz yok.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-primary">
+            <tr>
+                <th>Ev Fotoğrafı</th>
+                <th>Kiracı</th>
+                <th>Ev ID</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Bitiş Tarihi</th>
+                <th>Durum</th>
+                <th>Açıklama</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rezervasyon in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(rezervasyon.EvFotoUrl))
+                        {
+                            <img src="@rezervasyon.EvFotoUrl" alt="Ev Fotoğrafı" style="width:100px; height:auto;" />
+                        }
+                        else
+                        {
+                            <span>Fotoğraf yok</span>
+                        }
+                    </td>
+                    <td>@rezervasyon.KiraciAdi</td>
+                    <td>@rezervasyon.EvID</td>
+                    <td>@rezervasyon.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
+                    <td>@rezervasyon.BitisTarihi.ToString("dd.MM.yyyy")</td>
+                    <td>@rezervasyon.DurumAdi</td>
+                    <td>@rezervasyon.Aciklama</td>
+                    <td>
+                        @if (rezervasyon.DurumAdi == "Beklemede")
+                        {
+                            <form asp-action="RezervasyonOnayla" asp-route-id="@rezervasyon.RezervasyonID" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Rezervasyonu onaylamak istediğinize emin misiniz?');">
+                                    Onayla
+                                </button>
+                            </form>
+                            <form asp-action="RezervasyonReddet" asp-route-id="@rezervasyon.RezervasyonID" method="post" style="display:inline; margin-left:5px;">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Rezervasyonu reddetmek istediğinize emin misiniz?');">
+                                    Reddet
+                                </button>
+                            </form>
+                        }
+                        <a asp-action="RezervasyonDetay" asp-route-id="@rezervasyon.RezervasyonID" class="btn btn-info btn-sm ms-2">
+                            Detay
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Şifre Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-center">
+    <div class="welcome-container">
+        <div class="welcome-title">Şifre Güncelle</div>
+        <div class="card-container">
+            <div class="welcome-card">
+                @if (ViewBag.Hata != null)
+                {
+                    <div style="color:red; margin-bottom:15px;">@ViewBag.Hata</div>
+                }
+                @if (ViewBag.Basarili != null)
+                {
+                    <div style="color:green; margin-bottom:15px;">@ViewBag.Basarili</div>
+                }
+                <form method="post" asp-action="SifreGuncelle" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <input type="email" name="eposta" placeholder="E-posta" required class="form-control" />
+                    <input type="password" name="yeniSifre" placeholder="Yeni Şifre" required class="form-control" />
+                    <input type="password" name="yeniSifreTekrar" placeholder="Yeni Şifre (Tekrar)" required class="form-control" oninput="kontrolEt()" />
+                    <span id="uyariMetni" style="color:red; font-size: 0.9rem;"></span>
+                    <button type="submit" class="card-btn btn btn-primary">Şifreyi Güncelle</button>
+                </form>
+
+
+                <a href="/Kullanici/Giris">Girişe Dön</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function kontrolEt() {
+            var yeni = document.querySelector('[name="yeniSifre"]').value;
+            var tekrar = document.querySelector('[name="yeniSifreTekrar"]').value;
+            var uyari = document.getElementById("uyariMetni");
+
+            if (yeni !== tekrar) {
+                uyari.textContent = "Yeni şifreler uyuşmuyor!";
+            } else {
+                uyari.textContent = "";
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,78 @@
+﻿@model List<TinyHouse.Models.Bildirim>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Bildirilerim";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+
+
+<h2>Bildirimleriniz</h2>
+
+@if (Model.Count == 0)
+{
+    <p>Henüz bildiriminiz yok.</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var bildirim in Model)
+        {
+            <li class="list-group-item @(bildirim.Okundu ? "" : "fw-bold")" data-id="@bildirim.BildirimID">
+                <input type="checkbox" class="bildirim-okundu" @(bildirim.Okundu ? "checked disabled" : "") />
+                <strong>@bildirim.Baslik:</strong> @bildirim.Mesaj<br />
+                <small class="text-muted">@bildirim.OlusturmaTarihi.ToString("g")</small>
+            </li>
+        }
+    </ul>
+}
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.bildirim-okundu').forEach(chk => {
+            chk.addEventListener('change', function() {
+                if (this.checked) {
+                    const li = this.closest('li');
+                    const bildirimId = li.getAttribute('data-id');
+
+                    fetch('/Bildirim/IsaretleOkundu', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': '@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext!)?.RequestToken'
+                        },
+                        body: JSON.stringify({ id: bildirimId })
+                    }).then(res => {
+                        if (res.ok) {
+                            li.remove(); // Listeden kaldır
+                            if(document.querySelectorAll('.list-group-item').length === 0){
+                                document.querySelector('ul.list-group').innerHTML = '<p>Henüz bildiriminiz yok.</p>';
+                            }
+                        } else {
+                            alert('Güncelleme başarısız oldu.');
+                            this.checked = false;
+                        }
+                    }).catch(() => {
+                        alert('İstek sırasında hata oluştu.');
+                        this.checked = false;
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .list-group-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bildirim-okundu {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+</style>

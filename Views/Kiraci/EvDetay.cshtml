@@ -1,0 +1,231 @@
+﻿@model TinyHouse.Models.Ev
+@{
+    ViewData["Title"] = "Ev Detayları";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml";// Kiracı layout dosyasını kullan
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <img src="@Url.Content(Model.Resimler.Count > 0 ? Model.Resimler[0] : "/uploads/placeholder.jpg")" alt="Ev Fotoğrafı" />
+        <div class="card-body">
+            <h2 class="card-title">@Model.Baslik</h2>
+            <p class="card-text">@Model.Aciklama</p>
+            <p><strong>Fiyat:</strong> @Model.Fiyat ₺</p>
+            <p><strong>Konum:</strong> @Model.Konum</p>
+            <p><strong>Durum:</strong> @Model.Durum</p>
+
+            <h3>Rezervasyon Yap</h3>
+            <form asp-controller="KiraciRezervasyon" asp-action="Yap" method="post" style="max-width: 500px;">
+                <input type="hidden" name="evID" value="@Model.EvID" />
+
+                <div class="mb-3">
+                    <label for="baslangic" class="form-label">Başlangıç Tarihi</label>
+                    <input type="text" class="form-control" id="baslangic" name="baslangic" required autocomplete="off" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="bitis" class="form-label">Bitiş Tarihi</label>
+                    <input type="text" class="form-control" id="bitis" name="bitis" required autocomplete="off" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="aciklama" class="form-label">Açıklama (isteğe bağlı)</label>
+                    <textarea class="form-control" id="aciklama" name="aciklama" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Rezervasyon Yap</button>
+            </form>
+
+            @if (TempData["Hata"] != null)
+            {
+                <div class="alert alert-danger mt-3">@TempData["Hata"]</div>
+            }
+
+            @if (TempData["Basarili"] != null)
+            {
+                <div class="alert alert-success mt-3">@TempData["Basarili"]</div>
+            }
+
+            <hr />
+
+            <h3>Yorum Yap</h3>
+
+            @if (ViewBag.GecerliRezervasyonID != null)
+            {
+                <form asp-controller="KiraciYorum" asp-action="Ekle" method="post" style="max-width: 500px;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="EvID" value="@Model.EvID" />
+                    <input type="hidden" name="RezervasyonID" value="@ViewBag.GecerliRezervasyonID" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Puan:</label>
+                        <div id="starRating" class="star-rating">
+                            <span data-value="1" class="star">&#9734;</span>
+                            <span data-value="2" class="star">&#9734;</span>
+                            <span data-value="3" class="star">&#9734;</span>
+                            <span data-value="4" class="star">&#9734;</span>
+                            <span data-value="5" class="star">&#9734;</span>
+                        </div>
+                        <input type="hidden" id="Puan" name="Puan" value="0" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="YorumMetni" class="form-label">Yorumunuz:</label>
+                        <textarea id="YorumMetni" name="YorumMetni" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Gönder</button>
+                </form>
+            }
+            else
+            {
+                <p class="alert alert-warning">Yorum yapabilmek için bu evi kiralamış olmalısınız.</p>
+            }
+
+            <h3>Yorumlar</h3>
+            @if (Model.Yorumlar != null && Model.Yorumlar.Count > 0)
+            {
+                foreach (var yorum in Model.Yorumlar)
+                {
+                    <div class="border rounded p-3 mb-3">
+                        <strong>Puan: </strong> @yorum.Puan / 5 <br />
+                        <p>@yorum.YorumMetni</p>
+                        <small class="text-muted">Tarih: @yorum.YorumTarihi.ToString("dd.MM.yyyy")</small>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Henüz yorum yapılmamış.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <style>
+        .btn-lila {
+            background-color: #9b59b6;
+            color: white;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+            .btn-lila:hover {
+                background-color: #8e44ad;
+                color: white;
+            }
+
+        .star {
+            font-size: 2rem;
+            color: #9b59b6;
+            cursor: pointer;
+            user-select: none;
+            margin-right: 5px;
+            transition: transform 0.1s ease;
+        }
+
+            .star:hover {
+                transform: scale(1.2);
+            }
+
+        /* Üstü çizili ve gri renk dolu tarih */
+        .dolu-tarih a.ui-state-default {
+            color: #8e44ad !important;
+            text-decoration: line-through;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+
+    <script>
+        var doluTarihAraliklari = [];
+
+               function tarihDolu(date) {
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            var checkDate = new Date(date.getTime());
+            checkDate.setHours(0, 0, 0, 0);
+
+            console.log("Kontrol edilen tarih:", checkDate.toISOString().substring(0,10));
+
+            if (date < today) {
+                return [false, '', 'Geçmiş tarih seçilemez'];
+            }
+
+            for (var i = 0; i < doluTarihAraliklari.length; i++) {
+                var bas = new Date(doluTarihAraliklari[i].baslangic);
+                var bit = new Date(doluTarihAraliklari[i].bitis);
+                bit.setDate(bit.getDate() + 1);
+
+                bas.setHours(0, 0, 0, 0);
+                bit.setHours(0, 0, 0, 0);
+
+                if (checkDate >= bas && checkDate < bit) {
+                    console.log("Dolu tarih bulundu:", checkDate.toISOString().substring(0,10));
+                    return [false, 'dolu-tarih', 'Dolu Tarih - Rezervasyon yapılmış'];
+                }
+            }
+
+            return [true, '', ''];
+        }
+
+
+        $(function () {
+            var evId = '@Model.EvID';
+            console.log("EvID (datepicker için):", evId);
+
+         $.getJSON('/Rezervasyon/DoluTarihler', { evId: evId })
+        .done(function (data) {
+            doluTarihAraliklari = data;
+
+            console.log("Dolu Tarih Aralıkları:");
+            for(let i=0; i < doluTarihAraliklari.length; i++) {
+                console.log(
+                    i + ": " +
+                    "baslangic = " + doluTarihAraliklari[i].baslangic + ", " +
+                    "bitis = " + doluTarihAraliklari[i].bitis
+                );
+            }
+
+            $("#baslangic, #bitis").datepicker("destroy");
+
+            $("#baslangic, #bitis").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: 0,
+                beforeShowDay: tarihDolu
+            });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            console.error("DoluTarihler JSON isteği başarısız:", textStatus, error);
+        });
+
+         });
+    
+
+        // Yıldız puanlama JS
+        $(document).ready(function () {
+            const stars = $('#starRating .star');
+            const puanInput = $('#Puan');
+
+            stars.on('click', function () {
+                const value = $(this).data('value');
+                puanInput.val(value);
+
+                stars.each(function () {
+                    $(this).html($(this).data('value') <= value ? '&#9733;' : '&#9734;');
+                });
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,132 @@
+﻿.welcome-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-title {
+    font-size: 3rem;
+    color: #6a0dad;
+    font-weight: bold;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    text-align: center;
+    text-shadow: 0 2px 10px #e0c3fc88;
+}
+
+.card-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 16px;
+}
+
+.welcome-card {
+    background: #fff;
+    border-radius: 28px;
+    box-shadow: 0 8px 36px #b39ddb55;
+    padding: 42px 36px;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+    .welcome-card:hover {
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 10px 40px #8f5ee588;
+    }
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #8f5ee5;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.card-desc {
+    color: #54426b;
+    font-size: 1.08rem;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.welcome-card input,
+.welcome-card select {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border: 1.5px solid #e0c3fc;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #faf5ff;
+    transition: border 0.18s, background 0.18s;
+}
+
+    .welcome-card input:focus,
+    .welcome-card select:focus {
+        border-color: #8f5ee5;
+        background: #ffffff;
+        outline: none;
+    }
+
+.card-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, #e096fa, #8f5ee5 90%);
+    border: none;
+    border-radius: 14px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 16px rgba(144, 86, 255, 0.3);
+}
+
+    .card-btn:hover {
+        background: linear-gradient(90deg, #8f5ee5, #e096fa 80%);
+        box-shadow: 0 6px 26px rgba(144, 86, 255, 0.5);
+        cursor: pointer;
+    }
+
+.welcome-card a {
+    margin-top: 10px;
+    font-weight: 500;
+    color: #6a0dad;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+    text-align: center;
+}
+
+    .welcome-card a:hover {
+        color: #b832fa;
+    }
+
+/* Mobil Uyum */
+@media (max-width: 768px) {
+    .main-center {
+        padding: 40px 0;
+        min-height: unset;
+    }
+
+    .card-container {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .welcome-title {
+        font-size: 2rem;
+    }
+
+    .welcome-card {
+        padding: 30px 7vw;
+        max-width: 96vw;
+    }
+}

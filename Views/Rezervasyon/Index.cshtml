@@ -1,0 +1,54 @@
+﻿@model List<TinyHouse.Models.RezervasyonViewModel>
+
+@{
+    ViewData["Title"] = "Rezervasyonlar";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Rezervasyonlar Listesi</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Rezervasyon ID</th>
+            <th>Ev Başlığı</th>
+            <th>Kiracı</th>
+            <th>Başlangıç Tarihi</th>
+            <th>Bitiş Tarihi</th>
+            <th>Ödeme Durumu</th>
+            <th>Durum</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.RezervasyonID</td>
+                <td>@r.EvBasligi</td>
+                <td>@r.KiraciAdi @r.KiraciSoyadi</td>
+                <td>@r.BaslangicTarihi.ToShortDateString()</td>
+                <td>@r.BitisTarihi.ToShortDateString()</td>
+                <td>@(r.OdemeYapildiMi ? "Ödendi" : "Ödenmedi")</td>
+                <td>@r.DurumAdi</td> <!-- Durum adı burada gösteriliyor -->
+                <td>
+                    <a asp-action="IptalOnay" asp-route-id="@r.RezervasyonID" class="btn btn-danger btn-sm">İptal Et</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

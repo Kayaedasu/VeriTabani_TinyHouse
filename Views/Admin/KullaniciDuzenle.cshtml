@@ -1,0 +1,57 @@
+﻿@model TinyHouse.Models.Kullanici
+
+@{
+    ViewData["Title"] = "Kullanıcı Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var roller = ViewBag.Roller as Dictionary<int, string>;
+}
+
+<div class="container">
+    <h2 class="mb-4">Kullanıcı Düzenle</h2>
+
+    <form method="post" asp-action="Duzenle" style="max-width: 600px;">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="KullaniciID" value="@Model.KullaniciID" />
+
+        <div class="mb-3">
+            <label for="Ad" class="form-label">Ad</label>
+            <input type="text" id="Ad" name="Ad" class="form-control" value="@Model.Ad" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Soyad" class="form-label">Soyad</label>
+            <input type="text" id="Soyad" name="Soyad" class="form-control" value="@Model.Soyad" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Telefon" class="form-label">Telefon</label>
+            <input type="text" id="Telefon" name="Telefon" class="form-control" value="@Model.Telefon" />
+        </div>
+
+        <div class="mb-3">
+            <label for="Eposta" class="form-label">E-posta</label>
+            <input type="email" id="Eposta" name="Eposta" class="form-control" value="@Model.Eposta" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="RolID" class="form-label">Rol</label>
+            <select id="RolID" name="RolID" class="form-select" required>
+                <option value="">Rol Seçiniz</option>
+                @foreach (var item in roller ?? new Dictionary<int, string>())
+                {
+                    <option value="@item.Key" selected="@(item.Key == Model.RolID ? "selected" : null)">
+                        @item.Value
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="AktifMi" name="AktifMi" value="true" @(Model.AktifMi ? "checked" : "") />
+            <label class="form-check-label" for="AktifMi">Aktif</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a href="/Admin/Kullanicilar" class="btn btn-secondary ms-2">İptal</a>
+    </form>
+</div>

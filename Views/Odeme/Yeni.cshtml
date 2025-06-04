@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "Ödeme Yap";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+
+<h3 style="color:#9b59b6; margin-bottom: 25px;">Ödeme Yap</h3>
+
+@if (TempData["Basarili"] != null)
+{
+    <div class="alert alert-success rounded-pill shadow-sm" style="background-color:#d8b4ff; color:#5a2ea6;">
+        @TempData["Basarili"]
+    </div>
+}
+
+<form asp-action="Yeni" asp-controller="KiraciOdeme" method="post" class="odeme-form">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="rezervasyonId" value="@ViewBag.RezervasyonID" />
+
+    <div class="form-group">
+        <label for="odemeYontemi">Ödeme Yöntemi</label>
+        <select id="odemeYontemi" name="OdemeYontemi" class="form-control custom-select">
+            <option value="Kredi Kartı">Kredi Kartı</option>
+            <option value="Nakit">Nakit</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="KartSahibi">Kart Sahibi</label>
+        <input type="text" id="KartSahibi" name="KartSahibi" class="form-control custom-input" required />
+    </div>
+
+    <div class="form-group">
+        <label for="KartNumarasi">Kart Numarası</label>
+        <input type="text" id="KartNumarasi" name="KartNumarasi" class="form-control custom-input"
+               pattern="\d{16}" maxlength="16" title="Kart numarası 16 rakamdan oluşmalıdır." required />
+
+
+    <div class="form-row">
+        <div class="form-group small-input">
+            <label for="SonKullanmaTarihi">Son Kullanma Tarihi</label>
+            <input type="month" id="SonKullanmaTarihi" name="SonKullanmaTarihi" class="form-control custom-input" required />
+        </div>
+        <div class="form-group small-input">
+                <label for="CVV">CVV</label>
+                <input type="text" id="CVV" name="CVV" class="form-control custom-input"
+                       pattern="\d{3}" maxlength="3" title="CVV 3 rakamdan oluşmalıdır." required />
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-submit">Ödeme Yap</button>
+</form>
+
+@if (ViewBag.Hata != null)
+{
+    <div class="alert alert-danger rounded-pill shadow-sm" style="background-color:#f8d7da; color:#842029; margin-top:15px;">
+        @ViewBag.Hata
+    </div>
+}
+
+@if (ViewBag.OdemeBasarili != null && ViewBag.OdemeBasarili == true)
+{
+    <div class="alert alert-success rounded-pill shadow-sm" style="background-color:#d1e7dd; color:#0f5132; margin-top:15px;">
+        Ödemeniz başarıyla yapıldı.
+    </div>
+}
+
+<style>
+    /* Form container */
+    .odeme-form {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #f6e6ff;
+        padding: 25px 30px;
+        border-radius: 20px;
+        box-shadow: 0 6px 15px rgba(155, 89, 182, 0.3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #4b0082;
+    }
+
+    label {
+        color: #9b59b6;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    /* Input fields */
+    .custom-input, .custom-select {
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        border: 1.8px solid #9b59b6;
+        background-color: #f9f0ff;
+        color: #4b0082;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+
+        .custom-input:focus, .custom-select:focus {
+            border-color: #7a5bbc;
+            outline: none;
+            background-color: #fff;
+        }
+
+    /* Small input fields side by side */
+    .form-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .small-input {
+        flex: 1;
+    }
+
+    /* Submit button */
+    .btn-submit {
+        background-color: #9b59b6;
+        color: white;
+        font-weight: 700;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: block;
+        margin-left: auto;
+    }
+
+        .btn-submit:hover {
+            background-color: #7a5bbc;
+        }
+
+    /* Alerts styling */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.getElementById('odemeYontemi').addEventListener('change', function () {
+            var krediKartBilgileri = document.getElementById('krediKartBilgileri');
+            if(krediKartBilgileri) {
+                krediKartBilgileri.style.display = this.value === 'Kredi Kartı' ? 'block' : 'none';
+            }
+        });
+    </script>
+}

@@ -1,0 +1,108 @@
+﻿@model TinyHouse.Models.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Paneli";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; // Admin layout dosyasını kullan
+}
+
+<div class="main-center">
+    <div class="welcome-container">
+
+        <div class="admin-header">
+            <div class="welcome-title">Hoş Geldiniz, Admin 👋</div>
+            <a href="/Kullanici/Cikis" class="admin-exit">Çıkış Yap</a>
+        </div>
+
+        <div class="card-container">
+            <div class="welcome-card">
+                <div class="card-title">👥 Kullanıcı Yönetimi</div>
+                <div class="card-desc">Kayıtlı kullanıcıları görüntüle, düzenle ve pasif yap.</div>
+                <a class="card-btn" href="/Admin/Kullanicilar">Yönet</a>
+            </div>
+            <div class="welcome-card">
+                <div class="card-title">🏠 İlan Denetimi</div>
+                <div class="card-desc">Yayınlanan Tiny House ilanlarını onayla veya kaldır.</div>
+                <a class="card-btn" asp-controller="Ilan" asp-action="Index">İncele</a>
+            </div>
+            <div class="welcome-card">
+                <div class="card-title">📅 Rezervasyonlar</div>
+                <div class="card-desc">Aktif ve bekleyen rezervasyonları görüntüle.</div>
+                <a class="card-btn" asp-controller="Rezervasyon" asp-action="Index">Görüntüle</a>
+            </div>
+            <div class="welcome-card">
+                <div class="card-title">💳 Ödeme & İstatistik</div>
+                <div class="card-desc">Sistem içi gelir, ödeme ve yorum analizlerini gör.</div>
+                <a class="card-btn" asp-controller="Odeme" asp-action="Gecmis">Rapor</a>
+            </div>
+        </div>
+
+        <div class="istatistik-container mt-5">
+            <h3>Sistem İstatistikleri</h3>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Toplam Kullanıcı</h5>
+                        <p>@Model.ToplamKullanici</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Aktif Kullanıcı</h5>
+                        <p>@Model.AktifKullanici</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Pasif Kullanıcı</h5>
+                        <p>@Model.PasifKullanici</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Toplam Rezervasyon</h5>
+                        <p>@Model.ToplamRezervasyon</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Bekleyen Rezervasyon</h5>
+                        <p>@Model.BekleyenRezervasyon</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Onaylanan Rezervasyon</h5>
+                        <p>@Model.OnaylananRezervasyon</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>İptal Edilen Rezervasyon</h5>
+                        <p>@Model.IptalEdilenRezervasyon</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Toplam Gelir</h5>
+                        <p>@Model.ToplamGelir.ToString("C")</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 mb-3">
+                        <h5>Toplam Ödeme Sayısı</h5>
+                        <p>@Model.ToplamOdemeSayisi</p>
+                    </div>
+                </div>
+            </div> <!-- row -->
+
+        </div> <!-- istatistik-container -->
+
+    </div> <!-- welcome-container -->
+</div> <!-- main-center -->

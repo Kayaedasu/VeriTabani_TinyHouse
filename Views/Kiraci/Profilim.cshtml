@@ -1,0 +1,70 @@
+﻿@model TinyHouse.Models.Profil
+
+@{
+    ViewData["Title"] = "Profilim";
+    Layout = "~/Views/Shared/_KiraciLayout.cshtml"; // Kiracı layout dosyasını kullan
+}
+<h2 style="color:#9b59b6; margin-bottom: 20px;">Profilim</h2>
+
+<table class="profil-table mx-auto">
+    <tbody>
+        <tr>
+            <th>Ad Soyad</th>
+            <td>@Model.AdSoyad</td>
+        </tr>
+        <tr>
+            <th>E-posta</th>
+            <td>@Model.Eposta</td>
+        </tr>
+        <tr>
+            <th>Telefon</th>
+            <td>@Model.Telefon</td>
+        </tr>
+        <tr>
+            <th>Rol</th>
+            <td>@Model.Rol</td>
+        </tr>
+    </tbody>
+</table>
+<style>
+    .profil-table {
+        width: 100%;
+        max-width: 600px;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+        background-color: #f6e6ff;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(155, 89, 182, 0.3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+        .profil-table th, .profil-table td {
+            padding: 15px 25px;
+            text-align: left;
+            vertical-align: middle;
+            border-radius: 20px;
+        }
+
+        .profil-table th {
+            background-color: #9b59b6;
+            color: white;
+            font-weight: 600;
+            width: 40%;
+        }
+
+        .profil-table td {
+            background-color: #e9d7ff;
+            color: #4b0082;
+            font-weight: 500;
+        }
+
+    /* Responsive küçülmeler için */
+    @@media (max-width: 640px) {
+        .profil-table th, .profil-table td
+
+    {
+        padding: 12px 15px;
+    }
+
+    }
+</style>

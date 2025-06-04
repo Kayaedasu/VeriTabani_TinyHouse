@@ -1,0 +1,94 @@
+﻿@model TinyHouse.Models.IlanDetayViewModel
+
+@{
+    ViewData["Title"] = "Bildirimler";
+    Layout = "~/Views/Shared/_EvSahibiLayout.cshtml";// EvSahibi layout dosyasını kullan
+}
+
+
+<h2>@Model.Ilan.Baslik</h2>
+
+@if (Model.Ilan.Fotolar.Any())
+{
+    <img src="@Model.Ilan.Fotolar.First().FotoUrl" alt="Ev Fotoğrafı" style="width:100%; max-height:400px; object-fit:cover;" />
+}
+else
+{
+    <p>Fotoğraf yok</p>
+}
+
+<p><strong>Açıklama:</strong> @Model.Ilan.Aciklama</p>
+<p><strong>Fiyat:</strong> @Model.Ilan.Fiyat.ToString("C")</p>
+
+<hr />
+
+<h3>Rezervasyonlar</h3>
+@if (Model.Rezervasyonlar.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kiracı</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Bitiş Tarihi</th>
+                <th>Ödeme Durumu</th>
+                <th>Durum</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Rezervasyonlar)
+            {
+                <tr>
+                    <td>@r.KiraciAdi</td>
+                    <td>@r.BaslangicTarihi.ToString("dd.MM.yyyy")</td>
+                    <td>@r.BitisTarihi.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        @if (r.OdemeDurumu == "Ödeme Yapıldı" || r.OdemeDurumu == "Ödendi")
+                        {
+                            <span class="badge bg-success">Ödendi</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Ödeme Bekleniyor</span>
+                        }
+
+                    </td>
+                    <td>@r.DurumAdi</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Henüz rezervasyon yok.</p>
+}
+
+<hr />
+
+<h3>Yorumlar</h3>
+@if (Model.Yorumlar.Any())
+{
+    @foreach (var yorum in Model.Yorumlar)
+    {
+        <div class="mb-3 p-3 border rounded">
+            <strong>Puan: </strong> @yorum.Puan <br />
+            <strong>Yorum: </strong> @yorum.YorumMetni <br />
+            <small class="text-muted">Tarih: @yorum.YorumTarihi.ToString("dd.MM.yyyy")</small>
+
+            @if (yorum.Cevap != null)
+            {
+                <div class="mt-2 p-2 bg-light border rounded">
+                    <strong>Cevap:</strong> @yorum.Cevap.CevapMetni <br />
+                    <small class="text-muted">Tarih: @yorum.Cevap.CevapTarihi.ToString("dd.MM.yyyy HH:mm")</small>
+                </div>
+            }
+        </div>
+    }
+}
+else
+{
+    <p>Henüz yorum yok.</p>
+}
+
+<a asp-action="Ilanlar" class="btn btn-primary mt-3">Geri Dön</a>

@@ -1,0 +1,31 @@
+﻿@model TinyHouse.Models.Kullanici
+
+@{
+    ViewData["Title"] = "Kullanıcı Sil";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="pasif-karti">
+                <h2 class="text-center">Kullanıcı Sil</h2>
+
+                <div class="alert alert-danger text-center mb-4">
+                    <strong>@Model.Ad @Model.Soyad</strong> adlı kullanıcıyı silmek üzeresiniz.<br />
+                    Bu işlem geri alınamaz.
+                </div>
+
+                <form method="post" asp-action="Sil">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.KullaniciID" />
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-danger px-4">Sil</button>
+                        <a href="/Admin/Kullanicilar" class="btn btn-secondary px-4">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
